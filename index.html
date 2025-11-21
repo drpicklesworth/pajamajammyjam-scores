@@ -18,6 +18,9 @@
             font-family: 'Courier New', monospace;
             padding: 40px 20px;
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .main-title {
@@ -27,7 +30,17 @@
             font-family: 'Great Vibes', cursive;
             text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
             text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 24px;
+            color: #d4af37;
+            text-align: center;
             margin-bottom: 50px;
+            opacity: 0.9;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .leaderboard-container {
@@ -204,8 +217,8 @@
 
         // Start loading data immediately
         loadData();
-        // Update every 30 seconds for live updates
-        setInterval(loadData, 30000);
+        // Update every 5 seconds for live updates
+        setInterval(loadData, 5000);
 
         async function loadData() {
             if (!SHEET_CSV_URL) return;
@@ -225,8 +238,7 @@
             } catch (error) {
                 document.getElementById('content').innerHTML = `
                     <div class="error">
-                        Error loading data. Please check your Google Sheet URL.<br><br>
-                        <button onclick="localStorage.removeItem('pjj_sheet_url'); location.reload();">Reconfigure</button>
+                        Error loading data from Google Sheet. Please check that the sheet is published correctly.
                     </div>
                 `;
             }
