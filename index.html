@@ -279,7 +279,14 @@
             if (!SHEET_CSV_URL) return;
 
             try {
-                const response = await fetch(SHEET_CSV_URL);
+                // Add cache-busting parameter to force fresh data
+                const cacheBuster = `?cb=${new Date().getTime()}`;
+                const response = await fetch(SHEET_CSV_URL + cacheBuster, {
+                    cache: 'no-store',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
                 const csvText = await response.text();
                 const newParticipants = parseCSV(csvText);
                 
