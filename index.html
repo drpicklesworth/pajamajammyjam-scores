@@ -58,10 +58,10 @@ body {
         <div class="loading">Loading leaderboard…</div>
     </div>
 </div>
-<div class="version" id="version">v2.0</div>
+<div class="version" id="version">v2.1</div>
 
 <script>
-const SHEET_JSON_URL = 'https://script.google.com/macros/s/AKfycbzU4HDRCWEOG60sKnFLs8RWjgaxtoDtgMfXf0SqTKu13fB0yRCWd1BxlmoMgVfEpnfUkQ/exec';
+const SHEET_JSON_URL = 'https://script.google.com/macros/s/AKfycbzA9HrgAl1SiXuQ85Mw64Gc5-z61fCpsajGUk2uEG8Cgg2xtGj4CWw0-mpkLs3Hs0Es/exec';
 const fallbackImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/240px-User-avatar.svg.png';
 let participants = [];
 
@@ -74,9 +74,10 @@ async function loadData() {
         const data = await res.json();
         participants = data.sort((a,b)=>b.score - a.score);
         renderLeaderboard();
-        document.getElementById('version').innerText = 'v2.0';
+        document.getElementById('version').innerText = 'v2.1';
     } catch (err) {
-        content.innerHTML = `<div class="error">Error loading leaderboard.</div>`;
+        console.error(err);
+        content.innerHTML = `<div class="error">Error loading leaderboard. Check Apps Script deployment and sheet permissions.</div>`;
     }
 }
 
