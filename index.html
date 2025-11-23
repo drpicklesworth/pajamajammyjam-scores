@@ -96,7 +96,7 @@ body {
 
 <div class="content-wrapper">
     <div id="content">
-        <div class="loading">Loading<span class="dots"></span></div>
+        <div class="loading">Preparing the slumber party<span class="dots"></span></div>
     </div>
 </div>
 
@@ -105,9 +105,21 @@ const SHEET_JSON_URL = 'https://script.google.com/macros/s/AKfycbzA9HrgAl1SiXuQ8
 const fallbackImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/240px-User-avatar.svg.png';
 let participants = [];
 
+const loadingTexts = [
+    "Fluffing the pillows",
+    "Mixing the cocoa",
+    "Counting pajama stripes",
+    "Tossing confetti",
+    "Aligning the stuffed animals"
+];
+
+function getRandomLoadingText() {
+    return loadingTexts[Math.floor(Math.random() * loadingTexts.length)];
+}
+
 async function loadData() {
     const content = document.getElementById('content');
-    content.innerHTML = `<div class="loading">Loading<span class="dots"></span></div>`;
+    content.innerHTML = `<div class="loading">${getRandomLoadingText()}<span class="dots"></span></div>`;
 
     try {
         const res = await fetch(SHEET_JSON_URL);
