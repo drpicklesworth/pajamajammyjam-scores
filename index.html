@@ -40,11 +40,31 @@ body {
     transition: all 0.8s ease;
 }
 
-.photo-container { width:100%; height:100%; background:#2a2a2a; border-radius:2px; overflow:hidden; position:relative; }
+/* Rank badge */
+.rank-badge {
+    position:absolute;
+    top:-10px;
+    left:-10px;
+    width:40px;
+    height:40px;
+    background: #ffd700;
+    color: #000;
+    border-radius:50%;
+    font-weight:bold;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:16px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* Photo inside frame */
+.photo-container { width:100%; height:140px; background:#2a2a2a; border-radius:8px; overflow:hidden; position:relative; }
 .photo { width:100%; height:100%; object-fit:cover; }
-.name-tag { margin-top:15px; background:rgba(212,175,55,0.2); padding:8px 20px; border-radius:20px; border:2px solid #d4af37; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,0.5); text-align:center; }
-.score { margin-top:10px; font-size:32px; color:#fff; font-weight:bold; text-shadow:2px 2px 4px rgba(0,0,0,0.7); }
-.rank { margin-top:5px; font-size:18px; font-weight:bold; color:#ffd700; text-shadow:1px 1px 2px #000; }
+
+/* Name and score inside frame */
+.name-tag { margin-top:10px; background:rgba(212,175,55,0.2); padding:6px 10px; border-radius:12px; border:2px solid #d4af37; font-weight:bold; text-shadow:1px 1px 2px rgba(0,0,0,0.5); text-align:center; font-size:14px; }
+.score { margin-top:5px; font-size:20px; color:#fff; font-weight:bold; text-shadow:2px 2px 4px rgba(0,0,0,0.7); }
 
 /* Subtle pulse for top 3 */
 .rank-1 .frame { animation: pulse 1.5s infinite alternate; }
@@ -72,26 +92,39 @@ body {
 </div>
 <div class="content-wrapper">
     <div id="content">
-        <div class="loading">Counting points<span class="dots"></span></div>
+        <div class="loading">Loading<span class="dots"></span></div>
     </div>
 </div>
-<div class="version" id="version">v2.3</div>
+<div class="version" id="version">v2.6</div>
 
 <script>
 const SHEET_JSON_URL = 'https://script.google.com/macros/s/AKfycbzA9HrgAl1SiXuQ85Mw64Gc5-z61fCpsajGUk2uEG8Cgg2xtGj4CWw0-mpkLs3Hs0Es/exec';
 const fallbackImage = 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/240px-User-avatar.svg.png';
 let participants = [];
 
+// Pajama Jammy Jam-themed loading lines
+const loadingLines = [
+    "Counting pillow points",
+    "Fluffing the leaderboard",
+    "Tossing confetti in slippers",
+    "Aligning jammy stars",
+    "Waking up the high scores"
+];
+
+function randomLoadingLine() {
+    return loadingLines[Math.floor(Math.random() * loadingLines.length)];
+}
+
 async function loadData() {
     const content = document.getElementById('content');
-    content.innerHTML = '<div class="loading">Counting points<span class="dots"></span></div>';
+    content.innerHTML = `<div class="loading">${randomLoadingLine()}<span class="dots"></span></div>`;
 
     try {
         const res = await fetch(SHEET_JSON_URL);
         const data = await res.json();
         participants = data.sort((a,b)=>b.score - a.score);
         renderLeaderboard();
-        document.getElementById('version').innerText = 'v2.3';
+        document.getElementById('version').innerText = 'v2.6';
     } catch (err) {
         console.error(err);
         content.innerHTML = `<div class="error">Error loading leaderboard. Check Apps Script deployment and sheet permissions.</div>`;
@@ -110,19 +143,19 @@ function renderLeaderboard() {
 
         card.innerHTML = `
             <div class="frame">
+                <div class="rank-badge">#${i+1}</div>
                 <div class="photo-container">
                     <img src="${p.photo || fallbackImage}" alt="${p.name}" class="photo" onerror="this.src='${fallbackImage}'">
                 </div>
+                <div class="name-tag">${p.name}</div>
+                <div class="score">${p.score} pts</div>
             </div>
-            <div class="name-tag">${p.name}</div>
-            <div class="rank">#${i+1}</div>
-            <div class="score">${p.score}</div>
         `;
         board.appendChild(card);
     });
 }
 
-// Initial load + 30s update
+// Initial load + 30s interval refresh
 loadData();
 setInterval(loadData, 30000);
 </script>
