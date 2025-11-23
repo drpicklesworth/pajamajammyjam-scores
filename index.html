@@ -23,8 +23,7 @@ body {
 .subtitle { font-size:20px; opacity:0.8; letter-spacing:3px; text-transform:uppercase; margin-top:5px;}
 .content-wrapper { margin-top:200px; display:flex; justify-content:center; align-items:center; min-height:calc(100vh-250px);}
 .leaderboard-container { display:flex; justify-content:center; align-items:flex-end; gap:30px; flex-wrap:wrap; max-width:100%; transition: all 0.8s ease; }
-.participant-card { display:flex; flex-direction:column; align-items:center; transition: transform 0.8s ease, order 0.8s ease; position:relative; animation: rocking 4s ease-in-out infinite alternate; }
-@keyframes rocking { 0% { transform: rotate(-2deg); } 100% { transform: rotate(2deg); } }
+.participant-card { display:flex; flex-direction:column; align-items:center; transition: transform 0.8s ease, order 0.8s ease; position:relative; }
 .frame { width:180px;height:220px; background:linear-gradient(145deg,#e6c04f 0%,#c4a747 100%);
     padding:12px;border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5), inset 0 2px 6px rgba(255,255,255,0.4); border:4px solid #8b6914; position:relative; transition: all 0.8s ease;}
 .frame::before { content:''; position:absolute; top:-4px; left:-4px; right:-4px; bottom:-4px;
@@ -60,7 +59,7 @@ body {
         <div class="loading">Loading leaderboard…</div>
     </div>
 </div>
-<div class="version" id="version">v2.2</div>
+<div class="version" id="version">v2.3</div>
 
 <script>
 const SHEET_JSON_URL = 'https://script.google.com/macros/s/AKfycbzA9HrgAl1SiXuQ85Mw64Gc5-z61fCpsajGUk2uEG8Cgg2xtGj4CWw0-mpkLs3Hs0Es/exec';
@@ -74,10 +73,9 @@ async function loadData() {
     try {
         const res = await fetch(SHEET_JSON_URL);
         const data = await res.json();
-        // Sort descending
         participants = data.sort((a,b)=>b.score - a.score);
         renderLeaderboard();
-        document.getElementById('version').innerText = 'v2.2';
+        document.getElementById('version').innerText = 'v2.3';
     } catch (err) {
         console.error(err);
         content.innerHTML = `<div class="error">Error loading leaderboard. Check Apps Script deployment and sheet permissions.</div>`;
