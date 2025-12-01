@@ -126,7 +126,7 @@ async function loadData() {
         const data = await res.json();
         participants = data.sort((a,b)=>b.score - a.score);
         renderLeaderboard();
-        document.getElementById('version').innerText = 'v2.3';
+        document.getElementById('version').innerText = 'v0.6';
         showUpdateIndicator();
     } catch(err) {
         console.error(err);
