@@ -119,14 +119,30 @@ function getRandomLoadingText() {
 
 async function loadData() {
     const content = document.getElementById('content');
-    content.innerHTML = `<div class="loading">${getRandomLoadingText()}<span class="dots"></span></div>`;
+    const hasExistingContent = content.querySelector('.leaderboard-container');
+    
+    // Only show loading message if page is empty
+    if (!hasExistingContent) {
+        content.innerHTML = `<div class="loading">${getRandomLoadingText()}<span class="dots"></span></div>`;
+    }
 
     try {
         const res = await fetch(SHEET_JSON_URL);
         const data = await res.json();
-        participants = data.sort((a,b)=>b.score - a.score);
+        
+        // Handle both new format {contestants: [], partyGuests: []} and old format [...]
+        if (data.contestants && Array.isArray(data.contestants)) {
+            participants = data.contestants.sort((a,b)=>b.score - a.score);
+        } else if (Array.isArray(data)) {
+            participants = data.sort((a,b)=>b.score - a.score);
+        } else {
+            console.error('Unexpected data format:', data);
+            content.innerHTML = `<div class="error">Error: Unexpected data format</div>`;
+            return;
+        }
+        
         renderLeaderboard();
-        document.getElementById('version').innerText = 'v0.61';
+        document.getElementById('version').innerText = 'v0.62';
         showUpdateIndicator();
     } catch(err) {
         console.error(err);
