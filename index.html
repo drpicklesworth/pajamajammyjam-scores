@@ -163,11 +163,11 @@ function renderLeaderboard() {
         card.innerHTML = `
             <div class="frame">
                 <div class="photo-container">
-                    <img src="${p.photo || fallbackImage}" alt="${p.name}" class="photo" onerror="this.src='${fallbackImage}'">
+                    <img src="${p.simpsonURL || fallbackImage}" alt="${p.name}" class="photo" onerror="this.src='${fallbackImage}'">
                 </div>
             </div>
             <div class="name-tag">${p.name}</div>
-            <div class="score">${p.TimeToSimpson}</div>
+            <div class="score">${p.timeToSimpson}</div>
         `;
         board.appendChild(card);
     });
